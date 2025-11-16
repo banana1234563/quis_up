@@ -2,17 +2,19 @@ const choiceContainers = $('.choice-container');
 const choiceTexts = $('.choice-text');
 const progressText=$("#progressText");
 const progressBarFull=$("#progressBarFull");
+const scoreText = $("#score");
+const game = $("#game");
+const loader = $("#loader");
 
-
+const scoreBonus = 10;
 let questions = [
 
 
 ];
 let currentQuestion = {};
-
-
 let questionCounter = -1;
 let acceptingAnswers = false;
+let score = 0;
 
 $.ajax({
   method: 'GET',
@@ -52,6 +54,9 @@ for (const choice of choiceTexts) {
     const selectedAnswerIndex = $(event.target).attr("id");
     const classToApply = currentQuestion.answerIndex == selectedAnswerIndex ? "correct" : "incorrect";
     $(selectedChoice.parentElement).addClass(classToApply);  
+    if (classToApply === "correct") {
+    incrementScore(scoreBonus);
+    }
     setTimeout(function() {
       $(selectedChoice.parentElement).removeClass(classToApply);
       getNewQuestion();
@@ -87,3 +92,7 @@ function getNewQuestion() {
 }
 
 
+function incrementScore(number){
+score += number;
+scoreText.text(score);
+}
